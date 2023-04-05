@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Divider, List } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome } from "@expo/vector-icons";
 
 interface Item {
   id: number;
@@ -22,20 +23,25 @@ interface PDVProps {
 const mock: Item[] = [
   {
     id: 1,
-    name: 'Pão',
-    price: 4.5
+    name: "Pão",
+    price: 485,
   },
   {
     id: 2,
-    name: 'Leite',
-    price: 34
+    name: "Leite",
+    price: 34,
   },
   {
     id: 3,
-    name: 'Queijo',
-    price: 456
+    name: "Queijo",
+    price: 456,
   },
-]
+  {
+    id: 4,
+    name: "Feijao",
+    price: 456,
+  },
+];
 
 const PDV = ({ onTotalChange }: PDVProps) => {
   const [items, setItems] = useState<Item[]>(mock);
@@ -56,16 +62,26 @@ const PDV = ({ onTotalChange }: PDVProps) => {
       const total =
         items.reduce((acc, curr) => acc + curr.price, 0) + newItem.price;
       onTotalChange(total);
-      setTotal(total)
+      setTotal(total);
+    }
+  };
+
+  const handleItemRemove = (id: number) => {
+    const itemRemovido = items.filter((item) => item.id === id);
+    if (items.length > 1) {
+      setItems(items.filter((item) => item.id !== id));
+      setTotal(total - itemRemovido[0].price);
+    } else {
+      setItems(items.filter((item) => item.id !== id));
+      setTotal(0);
     }
   };
 
   useEffect(() => {
-    const total =
-      items.reduce((acc, curr) => acc + curr.price, 0);
+    const total = items.reduce((acc, curr) => acc + curr.price, 0);
     onTotalChange(total);
-    setTotal(total)
-  }, [])
+    setTotal(total);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -89,15 +105,20 @@ const PDV = ({ onTotalChange }: PDVProps) => {
             <Text style={styles.buttonText}>Adicionar item</Text>
           </TouchableOpacity>
         </View>
-        <List.Section title="Itens da venda">
+        <List.Section style={styles.containerItems} title="Itens da venda">
           {items.map((item) => (
             <View>
-              <List.Item
-                key={item.id}
-                title={item.name}
-                right={() => <Text>{`R$ ${item.price.toFixed(2)}`}</Text>}
-              />
-              <Divider style={{ height: 2 }} />
+              <View style={styles.Items} key={item.id}>
+                <List.Item
+                  title={`${item.name} -`}
+                  right={() => <Text>{` R$ ${item.price.toFixed(2)}`}</Text>}
+                />
+                <FontAwesome
+                  name="close"
+                  onPress={() => handleItemRemove(item.id)}
+                />
+              </View>
+              <Divider />
             </View>
           ))}
           <LinearGradient
@@ -151,9 +172,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
-    width: '100%',
+    width: "100%",
     height: 50,
-    marginBottom: 5
+    marginBottom: 5,
   },
   button: {
     backgroundColor: "#2196F3",
@@ -174,6 +195,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#9fb9c2",
     padding: 10,
     borderRadius: 8,
+  },
+
+  containerItems: {
+    alignItems: "center",
+  },
+
+  Items: {
+    width: 300,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 
