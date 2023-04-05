@@ -105,9 +105,10 @@ const PDV = ({ onTotalChange }: PDVProps) => {
             <Text style={styles.buttonText}>Adicionar item</Text>
           </TouchableOpacity>
         </View>
-        <List.Section style={styles.containerItems} title="Itens da venda">
+        <List.Section style={styles.containerItemsDaVenda} >
+        <Text style={styles.title}>Itens da venda:</Text>
           {items.map((item) => (
-            <View>
+            <View style={styles.testeItems}>
               <View style={styles.Items} key={item.id}>
                 <List.Item
                   title={`${item.name} -`}
@@ -127,31 +128,67 @@ const PDV = ({ onTotalChange }: PDVProps) => {
           />
         </List.Section>
       </View>
-      <View style={styles.containerFoot}>
-        <Text style={styles.title}>Preço Total:</Text>
-        <View style={styles.prices}>
-          <Text style={styles.title2}>R$: {total.toFixed(2)}</Text>
-          <Text style={styles.title3}>Desconto: R$: 20,00</Text>
+      <View style={[styles.card, styles.shadowProps]}>
+          <Text style={styles.title}>Resumo da Venda:</Text>
+          <View style={styles.overviewLine}>
+
+          <Text style={styles.total}>Subtotal</Text>
+          <Text style={[styles.total, styles.textEnd]}>{`R$ ${total.toFixed(2)}`}</Text>
+          </View>
+          <View style={styles.overviewLine}>
+
+          <Text style={[styles.total, styles.totalDiscount]}>Desconto</Text>
+          <Text style={[styles.total, styles.totalDiscount, styles.textEnd]}><FontAwesome name='tag' style={{marginTop: 4, marginRight: 5}} size={12} />{`R$ ${total.toFixed(2)}`}</Text>
+          </View>
+          <View style={styles.overviewLine}>
+            
+          <Text style={styles.total}>Total</Text>
+          <Text style={[styles.total, styles.textEnd]}>{`R$ ${total.toFixed(2)}`}</Text>
+          </View>
         </View>
-      </View>
     </View>
   );
 };
+
+const primary = "#4714D6"; //'#be3455'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#fff'
+  },
+
+  total: {
+    fontSize: 14,
+    fontWeight: "600",
+    width: "50%"
+  },
+
+  textEnd: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+
+  totalDiscount: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#3e3e3e"
+  },
+
+  overviewLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   content: {
     flex: 1,
-    padding: 16,
+    paddingBottom: 16,
   },
   gradient: {
     position: "absolute",
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
   },
@@ -175,34 +212,55 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     marginBottom: 5,
+    borderColor: primary,
+    textDecoration: primary,
   },
   button: {
-    backgroundColor: "#2196F3",
+    backgroundColor: primary,
     borderRadius: 8,
+    textAlign:"center",
+    width: "100%",
     paddingHorizontal: 8,
     paddingVertical: 13,
   },
   buttonText: {
-    color: "#fff",
+    color: "#EBEBEB",
+    width: "100%",
     fontWeight: "bold",
   },
-  containerFoot: {
-    alignContent: "flex-end",
-    borderRadius: 8,
+  card: {
+    width: "100%",
+    backgroundColor: "#e5e1ea",
+    borderRadius: 10,
+    marginBottom: 30,
+    padding: 20
+  },
+  shadowProps: {
+    shadowColor: "#211f21",
+    elevation: 10,
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3
   },
   prices: {
     display: "flex",
-    backgroundColor: "#9fb9c2",
+    bbackgroundColor: "#e5e1ea",
     padding: 10,
     borderRadius: 8,
   },
 
-  containerItems: {
-    alignItems: "center",
+  containerItemsDaVenda: {
+    
+    width: "100%",
+    fontWeight: "bold",
+  },
+
+  testeItems:{
+    width:"100%"
   },
 
   Items: {
-    width: 300,
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
