@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+} from 'react-native';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
-interface FormaPagamento {
+interface PaymentType {
   id: number;
   name: string;
+  icon: any;
 }
 
 interface FechamentoVendaProps {
@@ -11,26 +19,32 @@ interface FechamentoVendaProps {
   onFechamento: (formaPagamento: string) => void;
 }
 
-const formasPagamento: FormaPagamento[] = [
-  { id: 1, name: 'Dinheiro' },
-  { id: 2, name: 'Cartão de Crédito' },
-  { id: 3, name: 'Cartão de Débito' },
+const formasPagamento: PaymentType[] = [
+  { id: 1, name: 'Dinheiro', icon: 'money' },
+  { id: 2, name: 'Cartão de Crédito', icon: 'credit-card' },
+  { id: 3, name: 'Cartão de Débito', icon: 'credit-card-alt' },
 ];
 
 const FechamentoVenda = ({ total, onFechamento }: FechamentoVendaProps) => {
-  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(null);
+  const [formaPagamento, setFormaPagamento] = useState<PaymentType | null>(
+    null
+  );
 
-  const handleFormaPagamentoSelect = (formaPagamento: FormaPagamento) => {
-    setFormaPagamento(formaPagamento);
+  const handleFormaPagamentoSelect = (paymentType: PaymentType) => {
+    setFormaPagamento(paymentType);
   };
 
-  const renderItem = ({ item }: { item: FormaPagamento }) => {
+  const PaymentItem = ({ item }: { item: PaymentType }) => {
     return (
       <TouchableOpacity
-        style={[styles.formaPagamentoButton, formaPagamento?.id === item.id && styles.formaPagamentoButtonSelected]}
+        style={[
+          styles.formaPagamentoButton,
+          formaPagamento?.id === item.id && styles.formaPagamentoButtonSelected,
+        ]}
         onPress={() => handleFormaPagamentoSelect(item)}
       >
         <Text style={styles.formaPagamentoButtonText}>{item.name}</Text>
+        <FontAwesome name='credit-card-alt' style={styles.currencyIcon} />
       </TouchableOpacity>
     );
   };
@@ -41,16 +55,22 @@ const FechamentoVenda = ({ total, onFechamento }: FechamentoVendaProps) => {
       <Text style={styles.total}>{`R$ ${total.toFixed(2)}`}</Text>
       <FlatList
         data={formasPagamento}
-        renderItem={renderItem}
+        renderItem={PaymentItem}
         keyExtractor={(item) => item.id.toString()}
         style={styles.formaPagamentoList}
       />
-      <TouchableOpacity style={styles.button} onPress={() => onFechamento(formaPagamento?.name || '')} disabled={!formaPagamento}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => onFechamento(formaPagamento?.name || '')}
+        disabled={!formaPagamento}
+      >
         <Text style={styles.buttonText}>Fechar Venda</Text>
       </TouchableOpacity>
     </View>
   );
 };
+
+const primary = '#4714D6' //'#be3455'
 
 const styles = StyleSheet.create({
   container: {
@@ -74,38 +94,39 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   formaPagamentoButton: {
+    flexDirection: 'row',
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#2196F3',
+    borderColor: primary,
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
+    justifyContent: 'space-between'
   },
   formaPagamentoButtonSelected: {
-    backgroundColor: '#2196F3',
+    backgroundColor: primary,
   },
   formaPagamentoButtonText: {
-    color: '#2196F3',
+    color: primary,
+    fontSize: 18
   },
 
   button: {
-  backgroundColor: '#2196F3',
-  padding: 16,
-  borderRadius: 8,
-  alignSelf: 'stretch',
-  alignItems: 'center',
+    backgroundColor: primary,
+    padding: 16,
+    borderRadius: 8,
+    alignSelf: 'stretch',
+    alignItems: 'center',
   },
   buttonText: {
-  color: '#fff',
-  fontWeight: 'bold',
-  fontSize: 16,
+    color: '#EBEBEB',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
-  });
-  
-  export default FechamentoVenda;
-    
-    
-    
-    
-    
-    
+  currencyIcon: {
+    fontSize: 25,
+    color: primary
+  }
+});
+
+export default FechamentoVenda;
