@@ -108,8 +108,8 @@ const PDV = ({ onTotalChange }: PDVProps) => {
         <List.Section style={styles.containerItemsDaVenda} >
         <Text style={styles.title}>Itens da venda:</Text>
           {items.map((item) => (
-            <View style={styles.testeItems}>
-              <View style={styles.Items} key={item.id}>
+            <View style={styles.testeItems}key={item.id}>
+              <View style={styles.Items} >
                 <List.Item
                   title={`${item.name} -`}
                   right={() => <Text>{` R$ ${item.price.toFixed(2)}`}</Text>}
